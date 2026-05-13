@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Registrar Nuevo Artista</h2>
+<form action="/artistas/nuevo" method="POST" class="col-md-6 border p-4 rounded bg-dark">
+    <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <input type="text" name="nombre" class="form-control bg-secondary text-white" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Nacionalidad</label>
+        <input type="text" name="nacionalidad" class="form-control bg-secondary text-white">
+    </div>
+    <button type="submit" class="btn btn-success">Guardar Artista</button>
+</form>
+{% endblock %}
