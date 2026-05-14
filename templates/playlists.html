@@ -1,13 +1,34 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Mis Playlists</h2>
-<div class="row">
-    <div class="col-md-4">
-        <div class="card p-3">
-            <h5>Playlist de Prueba</h5>
-            <p class="text-muted">ID: 1</p>
-            <a href="/playlist/1" class="btn btn-outline-success">Ver Canciones</a>
-        </div>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-success"><i class="fas fa-music"></i> Mis Playlists</h2>
+        <button class="btn btn-success" id="btn-nueva-playlist">
+            <i class="fas fa-plus"></i> Nueva Playlist
+        </button>
+    </div>
+    
+    <div class="row" id="contenedor-playlists">
+        {% if playlists %}
+            {% for p in playlists %}
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-dark text-white border-success shadow">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ p.nombre }}</h5>
+                            <p class="text-muted small">ID: {{ p.id }}</p>
+                            <a href="/playlist/{{ p.id }}" class="btn btn-sm btn-outline-success">Ver Canciones</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info bg-dark text-info border-info">Aún no tienes listas.</div>
+            </div>
+        {% endif %}
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ url_for('static', filename='js/playlist.js') }}"></script>
 {% endblock %}

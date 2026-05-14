@@ -4,6 +4,19 @@
     <h2 class="text-white">Catálogo de Canciones</h2>
     <a href="/canciones/nuevo" class="btn btn-success"> + Agregar Canción</a>
 </div>
+<form action="/canciones/filtrar" method="GET" class="mb-4">
+    <div class="input-group">
+        <input type="text" name="pais" class="form-control bg-dark text-white border-success" 
+               placeholder="Filtrar canciones por país del artista (ej: México)..." 
+               value="{{ filtro if filtro else '' }}">
+        <button class="btn btn-success" type="submit">
+            <i class="fas fa-search"></i> Buscar
+        </button>
+        {% if filtro %}
+            <a href="/canciones" class="btn btn-outline-light">Limpiar</a>
+        {% endif %}
+    </div>
+</form>
 
 <table class="table table-dark table-hover">
     <thead>

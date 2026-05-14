@@ -83,3 +83,42 @@ class Cancion():
         except Exception as ex:
             print(f"Error al obtener canciones: {ex}")
             return []
+
+
+    @staticmethod
+    def get_by_artist_country(pais_busqueda: str) -> list:
+        try:
+            connection = get_connection()
+            cursor = connection.cursor(pymysql.cursors.DictCursor)
+
+            sql = """
+                SELECT c.*, a.nombre as artista_nombre 
+                FROM canciones c
+                INNER JOIN artistas a ON c.artista_id = a.id
+                WHERE c.artista_id IN (
+                    SELECT id FROM artistas WHERE nacionalidad LIKE %s
+                ) AND c.is_active = 1
+            """
+            cursor.execute(sql, (f"%{pais_busqueda}%",))
+            rows = cursor.fetchall()
+
+            lista_canciones = []
+            for row in rows:
+                obj = Cancion(
+                    id=row["id"],
+                    nombre=row["nombre"],
+                    duracion_segundos=row["duracion_segundos"],
+                    genero=row["genero"],
+                    artista_id=row["artista_id"],
+                    album_id=None,
+                    is_active=True
+                )
+                obj.artista_nombre = row["artista_nombre"]
+                lista_canciones.append(obj)
+
+            cursor.close()
+            connection.close()
+            return lista_canciones
+        except Exception as ex:
+            print(f"Error en filtro por país: {ex}")
+            return []

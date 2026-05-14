@@ -18,46 +18,7 @@ class User (UserMixin):
         return self._is_active
 
 
-    def check_email_exists(email) -> bool:
-        
-        connection = get_connection()
-        cursor = connection.cursor(pymysql.cursors.DictCursor)
-        sql = "SELECT email from usuarios WHERE email = %s"
-        cursor.execute(sql, (email,))
-
-        row = cursor.fetchone()
-
-        cursor.close()
-        connection.close()
-        return row is not None
-    
-    @staticmethod
-    def save(nombre: str, email: str, password: str, pais: str) -> bool:
-        
-        try:
-            connection = get_connection()
-            cursor = connection.cursor()
-
-            sql = """
-                INSERT INTO usuarios (nombre, email, password, pais, is_active) 
-                VALUES (%s, %s, %s, %s, %s)
-            """
-
-            cursor.execute(sql, (nombre, email, password, pais, 1))
-
-            connection.commit()
-
-            cursor.close()
-            connection.close()
-
-            return True
-
-        except Exception as ex:
-            print(f"Error saving user: {ex}")
-            return False
-
-
-    @staticmethod
+    @staticmethod 
     def check_login(email, password):
         try:
             connection = get_connection()
@@ -81,5 +42,41 @@ class User (UserMixin):
             return None
             
         except Exception as ex:
-            print(f"Error login user: {ex}")
+            print(f"Error en login: {ex}")
             return None
+    
+    @staticmethod
+    def save(nombre: str, email: str, password: str, pais: str) -> bool:
+        connection = get_connection()
+        cursor = connection.cursor()
+        
+        try:
+            cursor.execute("START TRANSACTION;")
+
+            sql_user = """
+                INSERT INTO usuarios (nombre, email, password, pais, is_active) 
+                VALUES (%s, %s, %s, %s, 1)
+            """
+            cursor.execute(sql_user, (nombre, email, password, pais))
+
+            cursor.execute("SELECT LAST_INSERT_ID();")
+            nuevo_id = cursor.fetchone()[0]
+
+            sql_playlist = """
+                INSERT INTO playlists (nombre, usuario_id, is_active) 
+                VALUES ('Mis Favoritos', %s, 1)
+            """
+            cursor.execute(sql_playlist, (nuevo_id,))
+            cursor.execute("COMMIT;")
+            
+            cursor.close()
+            connection.close()
+            return True
+
+        except Exception as ex:
+            print(f"ERROR EN TRANSACCIÓN: {ex}")
+            cursor.execute("ROLLBACK;")
+            cursor.close()
+            connection.close()
+            return False
+    
