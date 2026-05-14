@@ -1,15 +1,38 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Registrar Nuevo Artista</h2>
-<form action="/artistas/nuevo" method="POST" class="col-md-6 border p-4 rounded bg-dark">
-    <div class="mb-3">
-        <label class="form-label">Nombre</label>
-        <input type="text" name="nombre" class="form-control bg-secondary text-white" required>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h2 class="mb-4 text-center">Registrar Nuevo Artista</h2>
+        
+        <form class="bg-dark p-4 rounded border">
+            <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <input type="text" id="art-nombre" class="form-control bg-secondary text-white" required>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Nacionalidad</label>
+                <input type="text" id="art-nacionalidad" class="form-control bg-secondary text-white" required>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Fecha de Nacimiento</label>
+                    <input type="date" id="art-fecha" class="form-control bg-secondary text-white" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Oyentes Mensuales</label>
+                    <input type="number" id="art-oyentes" class="form-control bg-secondary text-white" min="0" placeholder="Ej: 1500000">
+                </div>
+            </div>
+            
+            <button type="button" id="btn-save-artista" class="btn btn-success w-100">Guardar Artista</button>
+            <a href="/artistas" class="btn btn-outline-light w-100 mt-2">Cancelar</a>
+        </form>
     </div>
-    <div class="mb-3">
-        <label class="form-label">Nacionalidad</label>
-        <input type="text" name="nacionalidad" class="form-control bg-secondary text-white">
-    </div>
-    <button type="submit" class="btn btn-success">Guardar Artista</button>
-</form>
+</div>
+
+<script src="{{ url_for('static', filename='js/artista.js') }}"></script>
 {% endblock %}

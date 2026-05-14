@@ -19,15 +19,7 @@ class User (UserMixin):
 
 
     def check_email_exists(email) -> bool:
-        """
-            Verifica si la cuenta de correo electrónico ya se encuentra registrada.
-
-            Parameters:
-                email (str): Correo electrónico a validar.
-
-            Returns:
-                bool: True si el correo ya se encunetra registrado; de lo contrario, False.
-        """
+        
         connection = get_connection()
         cursor = connection.cursor(pymysql.cursors.DictCursor)
         sql = "SELECT email from usuarios WHERE email = %s"
@@ -41,18 +33,7 @@ class User (UserMixin):
     
     @staticmethod
     def save(nombre: str, email: str, password: str, pais: str) -> bool:
-        """
-            Guarda un registro de usuario en la base de datos
-
-            Parameters:
-                nombre (str): Nombre del usuario.
-                email (str): Correo electrónico del usuario.
-                password (str): Contraseña del usuario en texto plano.
-                pais (str): País del usuario.
-
-            Returns:
-                bool: True si la cuenta se guardó correctamente; de lo contrario, False.
-        """
+        
         try:
             connection = get_connection()
             cursor = connection.cursor()
@@ -74,5 +55,31 @@ class User (UserMixin):
         except Exception as ex:
             print(f"Error saving user: {ex}")
             return False
-        
 
+
+    @staticmethod
+    def check_login(email, password):
+        try:
+            connection = get_connection()
+            cursor = connection.cursor(pymysql.cursors.DictCursor)
+            sql = "SELECT id, nombre, email, password, pais, is_active FROM usuarios WHERE email = %s"
+            cursor.execute(sql, (email,))
+            user_data = cursor.fetchone()
+
+            cursor.close()
+            connection.close()
+            
+            if user_data and user_data["password"] == password:
+                return User(
+                    id=user_data["id"],
+                    nombre=user_data["nombre"],
+                    email=user_data["email"],
+                    password=user_data["password"],
+                    pais=user_data["pais"],
+                    is_active=bool(user_data["is_active"])
+                )
+            return None
+            
+        except Exception as ex:
+            print(f"Error login user: {ex}")
+            return None
