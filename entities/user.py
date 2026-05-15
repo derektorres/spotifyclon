@@ -80,3 +80,22 @@ class User (UserMixin):
             connection.close()
             return False
     
+    @staticmethod
+    def check_email_exists(email: str) -> bool:
+        try:
+            connection = get_connection()
+            cursor = connection.cursor()
+            
+            sql = "SELECT id FROM usuarios WHERE email = %s"
+            cursor.execute(sql, (email,))
+            
+            resultado = cursor.fetchone()
+            
+            cursor.close()
+            connection.close()
+            
+            return resultado is not None
+
+        except Exception as ex:
+            print(f"Error al verificar email: {ex}")
+            return True

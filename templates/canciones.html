@@ -24,8 +24,7 @@
             <th>Título</th>
             <th>Artista</th>
             <th>Género</th>
-            <th>Duración</th>
-            <th>Acciones</th>
+            <th>Duración</th>   
         </tr>
     </thead>
     <tbody>
@@ -36,9 +35,6 @@
             <td>{{ cancion.genero if cancion.genero else 'Sin género' }}</td>
             <td>
                 {{ (cancion.duracion_segundos // 60) }}:{{ "%02d" | format(cancion.duracion_segundos % 60) }}
-            </td>
-            <td>
-                <button class="btn btn-sm btn-outline-light">Editar</button>
             </td>
         </tr>
         {% endfor %}

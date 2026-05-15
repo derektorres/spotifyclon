@@ -12,7 +12,6 @@
             <th>Nombre</th>
             <th>Nacionalidad</th>
             <th>Oyentes Mensuales</th>
-            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -22,9 +21,6 @@
             <td>{{ artista.nombre }}</td>
             <td>{{ artista.nacionalidad }}</td>
             <td>{{ "{:,}".format(artista.oyentes_mensuales) }}</td>
-            <td>
-                <button class="btn btn-sm btn-outline-info">Editar</button>
-            </td>
         </tr>
         {% endfor %}
         

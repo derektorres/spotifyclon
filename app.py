@@ -15,7 +15,6 @@ def signin():
 def signup():
     return render_template('signup.html')
 
-
 @app.route('/artistas')
 def listar_artistas():
     lista = Artista.get_all_ordered()
@@ -24,7 +23,6 @@ def listar_artistas():
 @app.route('/artistas/nuevo')
 def crear_artista():
     return render_template('form_artista.html')
-
 
 @app.route('/canciones')
 def listar_canciones():
@@ -35,7 +33,6 @@ def listar_canciones():
 def formulario_cancion():
     artistas = Artista.get_all_ordered() 
     return render_template('form_cancion.html', artistas=artistas)
-
 
 @app.route('/playlists')
 def listar_playlists():
@@ -48,7 +45,6 @@ def listar_playlists():
 
     return render_template('playlists.html', playlists=lista)
 
-
 @app.route('/playlist/<int:id>')
 def detalle_playlist(id):
     user_id = session.get('user_id')
@@ -57,12 +53,10 @@ def detalle_playlist(id):
     todas_las_canciones = Cancion.get_all() 
     return render_template('detalle_playlist.html', id=id, canciones=todas_las_canciones)
 
-# --- INDEX ---
 @app.route('/index')
 def index():
     return render_template('index.html')
 
-# --- APIS ---
 @app.route('/api/login', methods=["POST"])
 def login():
     data = request.get_json()
